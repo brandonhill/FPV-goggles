@@ -1,6 +1,9 @@
 
 include <_setup.scad>;
-use <FPV goggles.scad>;
+use <bottom.scad>;
+use <middle.scad>;
+use <strap.scad>;
+use <top.scad>;
 
 //*
 color("silver")
@@ -14,14 +17,19 @@ mock_ipd();
 rotate([90, 0, 180]) {
 
 //*
-	fpv_goggle_top();
+	top();
+
+// strap buckle
+pos_strap_clips()
+rotate([0, 0, -25])
+strap_buckle();
 
 *
 	mock_lens();
 
 //*
 	translate([0, 0, -(LENS_DIST + TOLERANCE_CLOSE + SCREEN_DIST)])
-	fpv_goggle_mid();
+	middle();
 
 //*
 	mock_dvr();
@@ -34,7 +42,7 @@ rotate([90, 0, 180]) {
 
 *
 	translate([0, 0, -(LENS_DIST + TOLERANCE_CLOSE + SCREEN_DIST + TOLERANCE_CLOSE + SCREEN_DIM[2] + TOLERANCE_FIT + HOUSING_THICKNESS)])
-	fpv_goggle_bot();
+	bottom();
 }
 
 module mock_dvr(dim = DVR_DIM, pos = DVR_POS, rot = DVR_ROT) {

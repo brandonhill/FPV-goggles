@@ -1,0 +1,57 @@
+/******************************************************************************
+ * Config
+ */
+
+include <../BH-Lib/all.scad>;
+
+TOLERANCE_CLOSE = 0.15;
+TOLERANCE_FIT = 0.2;
+TOLERANCE_CLEAR = 0.25;
+
+DVR_DIM = [38, 25, 5];
+
+FACEPLATE_CORNER_R = 5;
+FACEPLATE_DIM = [130, 30, 60];
+FACEPLATE_OFFSET = 9;
+FACEPLACE_WIDTH = 10; // approx.
+
+HEAD_SCALE = 1.333; // scalar or vector3
+
+HOUSING_THICKNESS = 1.5;
+
+IPD = 70; // for sizing of head model used to diff faceplate
+
+LENS_CORNER_R = 0;
+LENS_DIM = [120, 80, [1.1, 8]]; // h is [min, max] along edges
+LENS_DIST = 40;
+
+NOSE_ANGLE = 30;
+NOSE_DIM = [60, 25, 40];
+NOSE_SCALING = 0.25;
+
+SCREEN_CORNER_R = 0;
+SCREEN_DIM = [120, 80, 15];
+
+VRX_ANT_SPACING = 46;
+VRX_DIM = [63.75, 78, 8];
+
+/******************************************************************************
+ * Setup
+ */
+
+DVR_POS = [-(LENS_DIM[0] - DVR_DIM[0]) / 2, -(LENS_DIM[1] - DVR_DIM[2]) / 2, -(LENS_DIST + LENS_DIM[2][1] + 1 + DVR_DIM[1] / 2)];
+DVR_ROT = [90, 0];
+
+HEAD_POS = [0, 68, -133]; // centred on pupils
+
+LENS_POS = [0, 0, -(LENS_DIST + LENS_DIM[2][1] / 2)];
+
+SCREEN_DIST = LENS_DIM[2][1] + VRX_DIM[0] + TOLERANCE_CLEAR; // from lens to screen
+SCREEN_POS = [0, 0, -(LENS_DIST + SCREEN_DIST + SCREEN_DIM[2] / 2)];
+SCREEN_ROT = [0, 0, 0];
+
+VRX_POS = [
+	(LENS_DIM[0] - VRX_DIM[1]) / 2,
+	(LENS_DIM[1] - VRX_DIM[2]) / 2,
+	-(LENS_DIST + LENS_DIM[2][1] + VRX_DIM[0] / 2)];
+VRX_ROT = [90, 90, 0];

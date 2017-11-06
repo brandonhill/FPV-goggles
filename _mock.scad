@@ -6,6 +6,7 @@ use <strap.scad>;
 use <top.scad>;
 
 //*
+
 color("silver")
 head();
 
@@ -14,34 +15,37 @@ mock_ipd();
 
 //translate([0, -50])
 //show_half(r = [0, 0, -90])
-rotate([90, 0, 180]) {
+//rotate([90, 0, 180])
+{
 
 //*
 	top();
 
 // strap buckle
-pos_strap_clips()
-rotate([0, 0, -25])
-strap_buckle();
+//*
+	pos_strap_clips()
+	rotate([0, 0, 25])
+	strap_buckle();
 
 *
 	mock_lens();
 
 //*
-	translate([0, 0, -(LENS_DIST + TOLERANCE_CLOSE + SCREEN_DIST)])
+	translate([LENS_DIST + TOLERANCE_CLOSE, 0])
 	middle();
 
-//*
+*
 	mock_dvr();
 
-//*
+*
 	mock_vrx();
 
 *
 	mock_screen();
 
 *
-	translate([0, 0, -(LENS_DIST + TOLERANCE_CLOSE + SCREEN_DIST + TOLERANCE_CLOSE + SCREEN_DIM[2] + TOLERANCE_FIT + HOUSING_THICKNESS)])
+	translate([LENS_DIST + TOLERANCE_CLOSE + SCREEN_DIST + TOLERANCE_CLOSE + SCREEN_DIM[2] + TOLERANCE_FIT + HOUSING_THICKNESS, 0])
+	rotate([0, 180])
 	bottom();
 }
 
@@ -53,9 +57,9 @@ module mock_dvr(dim = DVR_DIM, pos = DVR_POS, rot = DVR_ROT) {
 
 module mock_ipd() {
 	color("magenta")
-	reflect(y = false)
-	translate([IPD / 2, 0])
-	rotate([90, 0])
+	reflect(x = false)
+	translate([0, IPD / 2])
+	rotate([0, 90])
 	cylinder(h = 100, r = 0.5);
 }
 

@@ -114,8 +114,8 @@ module strap_clip(
 			}
 		}
 
-		// center cutout
-		translate([0, 0, clip_dim[1] / 2])
+		// center cutout - useless
+		*translate([0, 0, clip_dim[1] / 2])
 		cube([clip_dim[0] * 0.25, clip_dim[0] + 0.2, clip_dim[1] + 0.2], true);
 
 		// clip ring inset

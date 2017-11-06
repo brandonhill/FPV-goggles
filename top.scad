@@ -13,6 +13,9 @@ module top(
 		nose_offset = 30,
 		nose_scaling = NOSE_SCALING,
 		offset = FACEPLATE_OFFSET,
+		screw_dim = FACEPLATE_SCREW_DIM,
+		screw_length = FACEPLATE_SCREW_LENGTH,
+		screw_surround = SCREW_SURROUND,
 		seam_overlap = 0,//SEAM_OVERLAP,
 		clip_dim = STRAP_CLIP_DIM,
 		clip_surround = STRAP_CLIP_SURROUND,
@@ -22,6 +25,7 @@ module top(
 	) {
 
 	depth = dim[2] + seam_overlap;
+	x_offset = dim[2] - (lens_dist + seam_overlap);
 
 	steps_depth = 20;//round(depth / seam_overlap);
 	print(["Steps", steps_depth]);
@@ -31,23 +35,33 @@ module top(
 		for (i = [0 : steps_depth - 1])
 		hull()
 		for (step = [0, 1])
-		translate([0, 0, depth * (i + step) / steps_depth])
-		linear_extrude(0.1, convexity = 10)
-		shape(offset_point(lens_dim, -1), dim, lens_r, faceplate_r, (i + step) * 1.0 / steps_depth, inner = true);
+		translate([depth * (i + step) / steps_depth, 0])
+		rotate([90, 0, 90])
+//		scale([1, 1, step ? -1 : 1])
+		linear_extrude(0.1, convexity = 10, center = true)
+		shape(
+			offset_point(lens_dim, -1),
+			dim,
+			lens_r,
+			faceplate_r,
+			1 - (i + step) * 1.0 / steps_depth,
+			inner = true);
 	}
 
 	module outer() {
 		for (i = [0 : steps_depth - 1])
 		hull()
 		for (step = [0, 1])
-		translate([0, 0, depth * (i + step) / steps_depth])
+		translate([depth * (i + step) / steps_depth, 0])
+		rotate([90, 0, 90])
+		scale([1, 1, step ? -1 : 1])
 		linear_extrude(0.1, convexity = 10)
 		shape(
 			offset_point(lens_dim, thickness_housing + TOLERANCE_FIT),
 			offset_point(dim, thickness_faceplate),
 			lens_r + TOLERANCE_FIT + thickness_housing,
 			faceplate_r + thickness_faceplate,
-			(i + step) / steps_depth);
+			1 - (i + step) / steps_depth);
 	}
 
 	module shape(
@@ -91,45 +105,64 @@ module top(
 	}
 
 	difference() {
-		translate([0, 0, -(lens_dist + seam_overlap)])
+//		translate([lens_dist + seam_overlap, 0])
+		translate([-x_offset, 0])
 		intersection() {
 			union() {
+//				show_half()
 				difference() {
 					outer();
 					inner();
 				}
 
+				// nose surround
 				intersection() {
 					outer();
 
-					// nose surround
-					translate([0, -lens_dim[1] / 2 - thickness_housing / 2])
-					rotate([-nose_angle, 0, 0])
-					translate([0, 0, nose_dim[2]])
-					scale([1, 1, -1])
+					translate([lens_dist + nose_dim[2] / 2, 0, -lens_dim[1] / 2 - thickness_housing / 2])
+					rotate([0, nose_angle])
+					translate([-nose_dim[2], 0])
+					rotate([90, 0, 90])
 					linear_extrude(nose_dim[2], scale = nose_scaling)
 					smooth_acute(faceplate_r)
 					shape_nose_surround();
 				}
+
+				// screw surrounds
+				translate([x_offset, 0])
+				difference() {
+					translate([-screw_surround, 0])
+					pos_faceplate_screws()
+					rotate([90, 0, 90])
+					screw_surround(
+						attach_walls = true,
+						dim = screw_dim,
+						h = screw_surround,
+						holes = true,
+						mock = true,
+						tolerance = TOLERANCE_CLEAR,
+						walls = screw_surround);
+
+					inner();
+				}
 			}
 
 			// round top edges
+			translate([dim[2], 0])
 			union() {
 				hull()
-				rotate([0, 90])
+				rotate([90, 0])
 				reflect()
 				translate([-depth + faceplate_r * 2, dim[1] / 2 + thickness_faceplate - faceplate_r * 2])
 				cylinder(h = lens_dim[0] * 2, r = faceplate_r * 2, center = true);
 
-				cube([lens_dim[0] * 2, lens_dim[1] * 2, lens_dist * 2 + faceplate_r], true);
+				cube([lens_dist * 2, lens_dim[0] * 2, lens_dim[1] * 2], true);
 			}
 		}
 
 		// head
-		rotate([90, 0, 180]) {
-			scale(1.05)
-			head();
-		}
+		scale(1.05)
+		head();
 
 		// seam
 		*#

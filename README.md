@@ -28,12 +28,9 @@ Requires [BH Lib](https://github.com/brandonhill/BH-Lib). Checkout to adjacent d
 ## To do
 
 * DVR mount, switch holes
-* lens retainer, front
-* power/source switch mounts/holes
-* screen mount
-* screw surrounds/holes
-* strap mounts
-* strap buckles
 * VRx mount, display/switch holes
+* power/source switch mounts/holes
+* seams
+* screen mount
 * integrate fan, switch
 * integrate head tracker

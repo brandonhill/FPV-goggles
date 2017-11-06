@@ -26,9 +26,16 @@ module diff_lens(
 
 module head(pos = HEAD_POS, scale = HEAD_SCALE) {
 	scale(scale)
+	rotate([0, 0, 90])
 	translate(pos)
 	scale(20) // weird
 	import("head.stl");
+}
+
+module pos_faceplate_screws(pos = FACEPLATE_SCREW_POS) {
+	reflect(x = false, z = true)
+	translate(pos)
+	children();
 }
 
 module pos_strap_clips(
@@ -43,10 +50,10 @@ module pos_strap_clips(
 
 	a = atan(((dim[0] + thickness_faceplate * 2) - (lens_dim[0] + (TOLERANCE_FIT + thickness_housing) * 2)) / 2 / dim[2]);
 
-	reflect(y = false)
-	translate([lens_dim[0] / 2 + thickness_housing, 0, -lens_dist])
-	rotate([0, a, 0])
-	translate([0, 0, clip_dim[0] / 2 + TOLERANCE_FIT + clip_surround + TOLERANCE_CLEAR])
-	rotate([90, 0, 90])
+	reflect(x = false)
+	translate([lens_dist, lens_dim[0] / 2 + thickness_housing])
+	rotate([0, 0, -a])
+	translate([-(clip_dim[0] / 2 + TOLERANCE_FIT + clip_surround + TOLERANCE_CLEAR), 0])
+	rotate([-90, 90, 0])
 	children();
 }

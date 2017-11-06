@@ -11,6 +11,7 @@ module bottom(
 
 	h = screen_dim[2] + TOLERANCE_FIT + thickness_housing;
 
+	rotate([90, 0, 90])
 	difference() {
 		linear_extrude(h)
 		offset(r = TOLERANCE_FIT + thickness_housing)
@@ -18,6 +19,7 @@ module bottom(
 
 		translate([0, 0, thickness_housing])
 		linear_extrude(h)
+		offset(r = TOLERANCE_FIT)
 		rounded_square([screen_dim[0], screen_dim[1]], r);
 	}
 }

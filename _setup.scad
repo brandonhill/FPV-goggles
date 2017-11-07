@@ -1,6 +1,11 @@
 
 include <_conf.scad>;
 
+module diff_dvr() {
+	pos_dvr()
+	dvr_eachine_pro(case = false, tolerance = TOLERANCE_CLEAR);
+}
+
 module diff_lens(
 		dim = LENS_DIM,
 		offset = 0,
@@ -24,6 +29,11 @@ module diff_lens(
 	}
 }
 
+module diff_vrx() {
+	pos_vrx()
+	vrx_rd945(tolerance = TOLERANCE_CLEAR, omit = ["power_jack"]);
+}
+
 module head(pos = HEAD_POS, scale = HEAD_SCALE) {
 	scale(scale)
 	rotate([0, 0, 90])
@@ -32,9 +42,25 @@ module head(pos = HEAD_POS, scale = HEAD_SCALE) {
 	import("head.stl");
 }
 
+module position(pos, rot) {
+	translate(pos)
+	rotate(rot)
+	children();
+}
+
+module pos_dvr(pos = DVR_POS, rot = DVR_ROT) {
+	position(pos, rot)
+	children();
+}
+
 module pos_faceplate_screws(pos = FACEPLATE_SCREW_POS) {
 	reflect(x = false, z = true)
 	translate(pos)
+	children();
+}
+
+module pos_lens(pos = LENS_POS, rot = LENS_ROT) {
+	position(pos, rot)
 	children();
 }
 
@@ -55,5 +81,10 @@ module pos_strap_clips(
 	rotate([0, 0, -a])
 	translate([-(clip_dim[0] / 2 + TOLERANCE_FIT + clip_surround + TOLERANCE_CLEAR), 0])
 	rotate([-90, 90, 0])
+	children();
+}
+
+module pos_vrx(pos = VRX_POS, rot = VRX_ROT) {
+	position(pos, rot)
 	children();
 }

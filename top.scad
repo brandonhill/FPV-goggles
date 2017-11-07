@@ -21,7 +21,6 @@ module top(
 		clip_surround = STRAP_CLIP_SURROUND,
 		thickness_housing = HOUSING_THICKNESS,
 		thickness_faceplate = FACEPLACE_WIDTH,
-		vrx_ant_spacing = VRX_ANT_SPACING,
 	) {
 
 	depth = dim[2] + seam_overlap;

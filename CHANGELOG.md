@@ -9,6 +9,8 @@ This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html
 * Strap buckle/clip
 * Faceplate screw surrounds
 * Front lens retainer
+* VRx mounts, display/jack/switch holes
+* DVR mounts, switch holes, buttons
 
 ### Changed
 * Model orientation

@@ -106,7 +106,7 @@ module strap_clip(
 				hull()
 				shape_strap_clip();
 
-				translate([0, clip_dim[0] / 2 - thickness * 1.5, -clip_dim[0] / 2 + clip_dim[1]])
+				translate([0, clip_dim[0] / 2 - thickness, -clip_dim[0] / 2 + clip_dim[1]])
 				resize([clip_dim[0], clip_dim[0], clip_dim[0]])
 				rotate([-45, 0])
 				translate([0, 0, 0])

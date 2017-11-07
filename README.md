@@ -21,16 +21,15 @@ Requires [BH Lib](https://github.com/brandonhill/BH-Lib). Checkout to adjacent d
 * [48ch diversity video receiver](https://www.banggood.com/Skyzone-RD945-5_8G-48CH-Wireless-FPV-Receiver-p-1046256.html?p=82221313786612015035)
 * [Eachine Pro DVR](https://www.banggood.com/Eachine-ProDVR-Pro-DVR-Mini-Video-Audio-Recorder-for-FPV-Multicopters-p-1061196.html?p=82221313786612015035)
 * SPST mini switches
-* 2" elastic strap
+* 1.5" elastic strap
 * 25mm fan?
 * Arduino head tracker?
 
 ## To do
 
-* DVR mount, switch holes
-* VRx mount, display/switch holes
-* power/source switch mounts/holes
-* seams
-* screen mount
-* integrate fan, switch
-* integrate head tracker
+* Screen mount
+* Seams
+* Power/source switch mounts/holes
+* Power in
+* Add fan, switch
+* Add head tracker, switch

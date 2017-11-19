@@ -27,9 +27,10 @@ Requires [BH Lib](https://github.com/brandonhill/BH-Lib). Checkout to adjacent d
 
 ## To do
 
-* Screen mount
-* Seams
+* Voltage regulator (for DVR)
 * Power/source switch mounts/holes
 * Power in
+* Mic
 * Add fan, switch
 * Add head tracker, switch
+* Seams?

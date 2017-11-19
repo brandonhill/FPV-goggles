@@ -9,10 +9,10 @@ use <top.scad>;
 color("silver")
 head();
 
-//*
+*
 mock_ipd();
 
-//show_half(r = [0, 0, -90])
+//show_half()
 {
 
 //*
@@ -29,6 +29,7 @@ mock_ipd();
 
 	translate([TOLERANCE_CLOSE, 0]) {
 //*
+//color("black", 0.1) %
 		middle();
 
 //*
@@ -40,14 +41,20 @@ mock_ipd();
 //*
 		mock_vrx();
 
-*
-		mock_screen();
+		translate([TOLERANCE_CLOSE, 0]) {
 
 //*
-%
-		translate([LENS_DIST + TOLERANCE_CLOSE + SCREEN_DIST + TOLERANCE_CLOSE + SCREEN_DIM[2] + TOLERANCE_FIT + HOUSING_THICKNESS, 0])
-		rotate([0, 180])
-		bottom();
+			translate([0.005, 0])
+			mock_screen();
+
+//*
+			screen_switches();
+
+//*
+//color("black", 0.1) %
+//			show_half()
+			bottom();
+		}
 	}
 }
 
@@ -70,10 +77,10 @@ module mock_lens() {
 	% diff_lens();
 }
 
-module mock_screen(dim = SCREEN_DIM, pos = SCREEN_POS, rot = SCREEN_ROT) {
+module mock_screen(pos = SCREEN_POS, rot = SCREEN_ROT) {
 	translate(pos)
 	rotate(rot)
-	% cube(dim, true);
+	screen_800x600();
 }
 
 module mock_vrx() {

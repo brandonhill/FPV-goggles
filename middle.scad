@@ -33,7 +33,7 @@ module dvr_buttons(
 				cylinder(h = PRINT_LAYER * 2, r = dvr_btn_dim[0] / 2 + housing_thickness / 2);
 
 				// base
-				cylinder(h = base_height, r = dvr_btn_dim[0] / 2 + offset);
+				cylinder(h = base_height + (offset > 0 ? 10 : 0), r = dvr_btn_dim[0] / 2 + offset);
 
 				// raised portion
 				translate([0, 0, base_height])
@@ -82,11 +82,13 @@ module middle(
 		name_font = NAME_FONT,
 		name_size = NAME_SIZE,
 		screen_dim = SCREEN_DIM,
+		screen_housing_dim = SCREEN_HOUSING_DIM,
 		screen_dist = SCREEN_DIST,
 		screen_r = SCREEN_CORNER_R,
 		screw_dim = FACEPLATE_SCREW_DIM,
 		screw_length = FACEPLATE_SCREW_LENGTH,
 		screw_surround = SCREW_SURROUND,
+		screen_sw_pos = SCREEN_SWITCH_POS,
 		thickness_housing = HOUSING_THICKNESS,
 		vrx_av_pos = VRX_AV_OUT_POS,
 		vrx_av_spacing = VRX_AV_OUT_SPACING,
@@ -106,7 +108,7 @@ module middle(
 	module pos_av_jacks() {
 		translate([
 			vrx_av_pos[0] + vrx_av_spacing / 2,
-			-(lens_housing_dim[0] / 2 + vrx_pos[1] - av_cutout_dim[2] / 2),
+			-1, // TODO: config?
 			-vrx_board_dim[1] / 2 + vrx_board_pos[1] - TOLERANCE_CLEAR - av_cutout_dim[1] / 2,
 			])
 		pos_vrx()
@@ -120,18 +122,18 @@ module middle(
 			hull() {
 				translate([0, 0, screen_dist])
 				linear_extrude(0.1)
-				offset(r = TOLERANCE_FIT)
-				rounded_square([screen_dim[0], screen_dim[1]], screen_r);
+				offset(r = -thickness_housing)
+				rounded_square([screen_housing_dim[0], screen_housing_dim[1]], screen_r);
 
 				scale([1, 1, -1])
 				linear_extrude(0.1)
-				offset(r = TOLERANCE_FIT)
-				rounded_square([lens_dim[0], lens_dim[1]], lens_r);
+				offset(r = -thickness_housing)
+				rounded_square([lens_housing_dim[0], lens_housing_dim[1]], lens_r);
 			}
 
 			// A/V jacks cutout
 			pos_av_jacks()
-			cube(av_cutout_dim, true);
+			rounded_cube(av_cutout_dim, thickness_housing);
 		}
 	}
 
@@ -141,14 +143,14 @@ module middle(
 			rotate([90, 0, 90])
 			hull() {
 				linear_extrude(0.1)
-				offset(r = TOLERANCE_FIT + thickness_housing)
-				rounded_square([lens_dim[0], lens_dim[1]], lens_r);
+				smooth(thickness_housing)
+				rounded_square([lens_housing_dim[0], lens_housing_dim[1]], lens_r);
 
 				translate([0, 0, screen_dist])
 				scale([1, 1, -1])
 				linear_extrude(0.1)
-				offset(r = TOLERANCE_FIT + thickness_housing)
-				rounded_square([screen_dim[0], screen_dim[1]], screen_r);
+				smooth(thickness_housing)
+				rounded_square([screen_housing_dim[0], screen_housing_dim[1]], screen_r);
 			}
 
 			// A/V jacks cutout
@@ -156,8 +158,8 @@ module middle(
 			pos_av_jacks()
 			cube([
 				av_cutout_dim[0] - thickness_housing * 2,
-				av_cutout_dim[1] - thickness_housing,
-				av_cutout_dim[2] - thickness_housing], true);
+				av_cutout_dim[1],
+				av_cutout_dim[2]], true);
 		}
 	}
 
@@ -165,13 +167,12 @@ module middle(
 		union() {
 			outer();
 
-			// screw surrounds
+			// faceplate screw surrounds
 			pos_faceplate_screws()
-			rotate([90, 0, 90])
 			screw_surround(
 				attach_walls = true,
 				dim = screw_dim,
-				end = "rounded",
+				end = "point",
 				h = screw_length - screw_surround,
 				holes = true,
 				tolerance = TOLERANCE_CLOSE,
@@ -183,7 +184,10 @@ module middle(
 		diff_dvr();
 		dvr_buttons(offset = TOLERANCE_CLEAR);
 
+		diff_screen_switches();
+
 		diff_vrx();
+
 	}
 
 	// lens retainer
@@ -254,6 +258,30 @@ module middle(
 		}
 	}
 
+	// screen screw surrounds
+	pos_screen_screws()
+	screw_surround(
+		attach_walls = true,
+		dim = screw_dim,
+		end = "rounded",
+		h = screw_length - screw_surround,
+		holes = true,
+		tolerance = TOLERANCE_CLOSE,
+		walls = screw_surround);
+
+	// screen switch screw surrounds
+	pos_screen_switch()
+	pos_screen_switch_holes()
+	let(h = lens_housing_dim[1] / 2 + screen_sw_pos[2] - thickness_housing)
+	rotate([0, 0, 22.5])
+	screw_surround(
+		dim = screw_dim,
+		fn = 8,
+		h = h,
+		holes = true,
+		tolerance = TOLERANCE_CLOSE,
+		walls = screw_surround);
+
 	// VRx screw posts
 	pos_vrx()
 	pos_vrx_rd945_screws()
@@ -262,12 +290,11 @@ module middle(
 		rotate([0, 0, 22.5])
 		screw_surround(
 			dim = vrx_screw_dim,
+			fn = 8,
 			h = h,
 			holes = true,
-			walls = screw_surround,
-			tolerance = TOLERANCE_FIT,
-			fn = 8
-		);
+			tolerance = TOLERANCE_CLOSE,
+			walls = screw_surround);
 
 		// make printable
 		rotate([0, 0, 90])

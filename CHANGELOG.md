@@ -11,6 +11,7 @@ This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html
 * Front lens retainer
 * VRx mounts, display/jack/switch holes
 * DVR mounts, switch holes, buttons
+* Screen mount, button mounts/holes
 
 ### Changed
 * Model orientation

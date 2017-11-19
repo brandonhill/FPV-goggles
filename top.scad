@@ -132,14 +132,13 @@ module top(
 				difference() {
 					translate([-screw_surround, 0])
 					pos_faceplate_screws()
-					rotate([90, 0, 90])
 					screw_surround(
 						attach_walls = true,
 						dim = screw_dim,
 						h = screw_surround,
 						holes = true,
 						mock = true,
-						tolerance = TOLERANCE_CLEAR,
+						tolerance = TOLERANCE_CLOSE,
 						walls = screw_surround);
 
 					inner();
